@@ -14,7 +14,15 @@
       <q-card-section>
         <div class="row q-my-lg">
           <div class="col-md-9 col-sm-12">
-            <q-input outlined label="Search Applications" class="q-mt-md"  v-model="search" @blur="getList()" />
+            <form @submit.prevent="getList(true)" method="POST" >
+              <q-input bottom-slots  v-model="search" outlined label="Search Applications" hint="Hit ''Enter'' key or click search icon to search application.">
+                <template v-slot:append>
+                  <!-- <q-icon v-if="search !== ''" name="close" @click="search = '' && getList(true)" class="cursor-pointer" /> -->
+                  <q-icon name="search" @click="getList(true)" />
+                </template>
+              </q-input>
+              <!-- <q-input outlined label="Search Applications" class="q-mt-md"  v-model="search" @blur="getList(true)" /> -->
+            </form>
           </div>
           <div class="col-md-3 q-px-md col-sm-12">
             <div class="shadow-2 q-pa-sm">
@@ -58,7 +66,7 @@
             <template #body="props">
               <q-tr
                 :props="props"
-                :class="(hasOwner(props.row)) ? (isOwned(props.row)) ? 'bg-yellow' : 'bg-hrey-4': 'bg-white'"
+                :class="(hasOwner(props.row)) ? (isOwned(props.row)) ? 'bg-yellow' : 'bg-grey-4': 'bg-white'"
                 hover
                 style="cursor: pointer"
                 @click="update(props.row)"
@@ -105,7 +113,7 @@
                   key="payment_status"
                   :props="props"
                 >
-                  {{ props.row.payment_status }}
+                  <q-badge :color="`${paymentStatusColor(props.row.payment_status).bg}`">{{ props.row.payment_status }}</q-badge>
                 </q-td>
               </q-tr>
             </template>
@@ -226,6 +234,28 @@ import { Notify } from "quasar";
     watch: {
     },
     methods: {
+      paymentStatusColor(status){
+        switch (status){
+          case "FOR PAYMENT": 
+            return {
+              bg: "yellow-5",
+              text: "dark",
+            };
+            break;
+          case "PAID": 
+            return {
+              bg: "green-5",
+              text: "white",
+            };
+            break;
+          case "UNPAID": 
+            return {
+              bg: "red-14",
+              text: "white",
+            };
+            break;
+        }
+      },
       initApp(){
         this.refresh();
         this.localTimer = localStorage.getItem("timer");
@@ -280,6 +310,7 @@ import { Notify } from "quasar";
         this.selected_item = row;
         if(row.isLocked){
           if(this.isOwned(row)){
+            console.log(this.isOwned(row), "IS OWNED");
             this.$router.push({ name: "individual-application-update", params: { id: row.id } });
           } else {
             Notify.create({
@@ -296,8 +327,12 @@ import { Notify } from "quasar";
       },
       
 
-      async getList(){
+      async getList(is_search){
         let vm = this;
+        if(is_search){
+          vm.current = 1;
+        }
+
         vm.is_loading = true;
         
         let payload = {
