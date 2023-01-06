@@ -186,8 +186,8 @@ import { Notify } from "quasar";
           count: 0
         },
         {
-          name: "TOA",
-          code: 'TOA',
+          name: "COMPLIANCE",
+          code: 'COMPLIANCE',
           count: 0
         },
       ],

@@ -68,7 +68,7 @@
                           leave-active-class="animated fadeOut">
                 <div>
                   <strong class="text-grey-14">INTERNAL</strong>
-                  <RichText v-model="internal_comment_input" :disabled="release_status" :disable_editor="release_status != null" />
+                  <RichText v-model="internal_comment_input" :disabled="release_status" :disable_editor="has_release_status" />
                 </div>
               </transition>
               <!-- END INTERNAL COMMENTS -->
@@ -80,10 +80,10 @@
                           leave-active-class="animated fadeOut">
                 <div>
                   <strong class="text-grey-14">EXTERNAL</strong>
-                  <RichText v-model="external_comment_input" :disabled="release_status" :disable_editor="release_status != null" />
+                  <RichText v-model="external_comment_input" :disabled="release_status" :disable_editor="has_release_status" />
                 </div>
               </transition>
-              <div class="q-mt-md" v-if="release_status == null">
+              <div class="q-mt-md" v-if="!has_release_status">
                 <q-btn label="Save" size="sm" icon="comment_bank" :color="disable_comment_btn ? 'grey-14': 'red-14'" :disabled="disable_comment_btn" @click="saveComment" class="q-mr-sm" />
                 <q-btn label="Cancel" size="sm" icon="cancel" :color="disable_comment_btn ? 'grey-14': 'red-14'" :disabled="disable_comment_btn" />
               </div>
@@ -92,7 +92,7 @@
         </q-card>
       </q-card-section>
       <q-card-section>
-        <div class="row">
+        <div class="row" v-if="!has_release_status">
           <div class="col-12 col-md-6">
             <div class="form-group q-mb-md">
               <q-select v-model="decision_status" 
@@ -136,6 +136,9 @@
     },
 
     computed: {
+      has_release_status(){
+        return this.verifiedDateByReviewer != null;
+      },
       disable_comment_btn() {
         if (this.tab === 'internal_comments_tab' && this.internal_comment_input !== '') {
           return false;
