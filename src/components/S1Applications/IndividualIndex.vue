@@ -176,8 +176,8 @@ import { Notify } from "quasar";
           count: 0
         },
         {
-          name: "FOR DECICION AND COMMENTS",
-          code: 'FOR DECICION AND COMMENTS',
+          name: "FOR DECISION AND COMMENTS",
+          code: 'FOR DECISION AND COMMENTS',
           count: 0
         },
         {

@@ -319,7 +319,7 @@ import { Notify } from "quasar";
           data: {
               "form_group": "INDIVIDUAL",
               "application_type": ["SPECIAL SCREENING"],
-              "processType": vm.active_tab,
+              "process_type": vm.active_tab,
               "search": vm.search
           },
           params: {
