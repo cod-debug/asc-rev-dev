@@ -1,7 +1,10 @@
 <template>
   <q-editor v-model="editor"
+            :disable="disable_editor"
             toolbar-bg="grey-3"
             ref="editor"
+            :content-style="{ fontFamily: Calibri, }"
+            @click="initEditor"
             :toolbar="[
             [{
             label: $q.lang.editor.align,
@@ -9,21 +12,7 @@
             fixedLabel: true,
             list: 'only-icons',
             options: ['left', 'center', 'right', 'justify']
-          },{
-              label: $q.lang.editor.formatting,
-              icon: $q.iconSet.editor.formatting,
-              list: 'no-icons',
-              options: [
-                'p',
-                'h1',
-                'h2',
-                'h3',
-                'h4',
-                'h5',
-                'h6',
-                'code'
-              ]
-            },
+          },
             {
               label: $q.lang.editor.fontSize,
               icon: $q.iconSet.editor.fontSize,
@@ -31,29 +20,16 @@
               fixedIcon: true,
               list: 'no-icons',
               options: [
-                'size-1',
                 'size-2',
-                'size-3',
-                'size-4',
-                'size-5',
-                'size-6',
-                'size-7'
+                'size-1',
               ]
             },{
-              label: $q.lang.editor.defaultFont,
+              label: $q.lang.editor.default_font,
               icon: $q.iconSet.editor.font,
               fixedIcon: true,
               list: 'no-icons',
               options: [
                 'default_font',
-                'arial',
-                'arial_black',
-                'comic_sans',
-                'courier_new',
-                'impact',
-                'lucida_grande',
-                'times_new_roman',
-                'verdana'
               ]
             },'token', 'removeFormat', 'bold', 'italic', 'strike', 'underline', 'subscript', 'superscript', 'quote', 'unordered', 'ordered', 'outdent', 'indent', 'undo', 'redo'],
       ]"
@@ -89,12 +65,15 @@
 </template>
 <script>
   export default {
+    props:['disable_editor'],
     data() {
       return {
         foreColor: '#000000',
         highlight: '#ffff00aa',
         editor: 'Select some text,' +' then select a highlight or text color!',
         fonts:{
+          default_font: 'Calibri',
+          calibri_body: 'Calibri',
           arial: 'Arial',
           arial_black: 'Arial Black',
           comic_sans: 'Comic Sans MS',
@@ -106,7 +85,34 @@
         }
       }
     },
+    mounted(){
+      this.$nextTick(() => {
+        this.initEditor();
+      })
+    },
     methods: {
+      initEditor(){
+        
+        // console.log(document.getElementsByTagName("font"), "FONTS");
+        document.querySelector(".q-editor__toolbars-container").addEventListener('click', () => {        
+          let fontSize = document.getElementsByTagName("font");
+          let fontSizeCount = fontSize.length;
+          for(var i = 0; i < fontSizeCount; i++){
+            let text = fontSize[i].innerHTML;
+            switch(text){
+              case "Very small":
+                fontSize[i].innerHTML = "10 PT";
+                document.querySelector("font");
+                break;
+              case "A bit small":
+                fontSize[i].innerHTML = "11 PT";
+                break;
+            }
+            console.log();
+          }
+          
+        });
+      },
       color(cmd, name) {
         const edit = this.$refs.editor
         this.$refs.token.hide()

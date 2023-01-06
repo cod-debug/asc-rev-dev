@@ -68,7 +68,7 @@
                           leave-active-class="animated fadeOut">
                 <div>
                   <strong class="text-grey-14">INTERNAL</strong>
-                  <RichText v-model="internal_comment_input" />
+                  <RichText v-model="internal_comment_input" :disabled="release_status" :disable_editor="release_status != null" />
                 </div>
               </transition>
               <!-- END INTERNAL COMMENTS -->
@@ -80,10 +80,10 @@
                           leave-active-class="animated fadeOut">
                 <div>
                   <strong class="text-grey-14">EXTERNAL</strong>
-                  <RichText v-model="external_comment_input" />
+                  <RichText v-model="external_comment_input" :disabled="release_status" :disable_editor="release_status != null" />
                 </div>
               </transition>
-              <div class="q-mt-md">
+              <div class="q-mt-md" v-if="release_status == null">
                 <q-btn label="Save" size="sm" icon="comment_bank" :color="disable_comment_btn ? 'grey-14': 'red-14'" :disabled="disable_comment_btn" @click="saveComment" class="q-mr-sm" />
                 <q-btn label="Cancel" size="sm" icon="cancel" :color="disable_comment_btn ? 'grey-14': 'red-14'" :disabled="disable_comment_btn" />
               </div>

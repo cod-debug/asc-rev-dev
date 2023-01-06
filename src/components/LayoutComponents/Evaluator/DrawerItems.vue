@@ -51,6 +51,7 @@ export default {
   }),
   methods: {
     async initApp() {
+      let vm = this;
       let {data, status} = await this.$store.dispatch("asc_user/getCountByRole");
 
       this.drawerItems = [
@@ -60,21 +61,33 @@ export default {
           children: [
             {
               icon: "fa-solid fa-caret-right",
-              label: "Application List",
+              label: "Individual Applications",
               count: data.individualCount || 0,
               path: "/asc/page/application/s1/lists",
             },
             {
               icon: "fa-solid fa-caret-right",
               label: "Multiple Applications",
-              count: data.individualCount || 0,
+              count: data.multipleCount || 0,
               path: "/asc/page/application/s1/multiple",
             },
             {
               icon: "fa-solid fa-caret-right",
               label: "Special Applications",
-              count: data.individualCount || 0,
+              count: data.specialCount || 0,
               path: "/asc/page/application/s1/special",
+            },
+            {
+              icon: "fa-solid fa-caret-right",
+              label: "For Release",
+              count: data.forReleaseCount || 0,
+              path: "/asc/page/application/s1/for-release",
+            },
+            {
+              icon: "fa-solid fa-caret-right",
+              label: "Released",
+              count: data.releasedCount || 0,
+              path: "/asc/page/application/s1/released",
             }
           ]
         },
@@ -84,6 +97,16 @@ export default {
           path: "/asc/page/announcement",
         },
       ];
+      
+
+      setInterval(async () => {
+        let {data, status} = await this.$store.dispatch("asc_user/getCountByRole");
+        if([200, 201].includes(status)){
+          vm.drawerItems[0].children[0].count = data.individualCount;
+          vm.drawerItems[0].children[1].count = data.multipleCount;
+          vm.drawerItems[0].children[2].count = data.specialCount;
+        }
+      }, 1000);
     }
   },
   mounted() {
