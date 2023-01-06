@@ -318,7 +318,7 @@ import { Notify } from "quasar";
         let payload = {
           data: {
               "form_group": "INDIVIDUAL",
-              "application_type": ["SPECIAL SCREENING", "SPECIAL SCREENING AND CLEARING"],
+              "application_type": ["SPECIAL SCREENING"],
               "processType": vm.active_tab,
               "search": vm.search
           },
