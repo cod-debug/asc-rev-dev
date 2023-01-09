@@ -336,7 +336,6 @@ import { Notify } from "quasar";
         if(is_search){
           vm.current = 1;
         }
-
         vm.is_loading = true;
         
         let payload = {
@@ -354,6 +353,7 @@ import { Notify } from "quasar";
         let {data, status} = await vm.$store.dispatch("s1/getS1Applications", payload);
         if([200, 201].includes(status)){
           vm.table_data = data.data.map((item) => {
+            console.log(item);
             return {...item, 
               company_name: item?.company?.name || "--", 
               type_medium_name: item.type_of_medium.length > 0 ? item.type_of_medium.map((i) => i.type_of_medium ): [],
@@ -363,6 +363,7 @@ import { Notify } from "quasar";
           vm.max_page = data.lastPage || 0;
           vm.is_loading = false;
         } else {
+          console.log(data);
           vm.is_loading = false;
         }
       },

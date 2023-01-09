@@ -314,11 +314,11 @@ import { Notify } from "quasar";
           vm.current = 1;
         }
         vm.is_loading = true;
-        
+      
         let payload = {
           data: {
               "form_group": "INDIVIDUAL",
-              "application_type": ["SPECIAL SCREENING"],
+              "application_type": ["SPECIAL SCREENING", "SPECIAL SCREENING AND CLEARING"],
               "process_type": vm.active_tab,
               "search": vm.search
           },
@@ -328,6 +328,7 @@ import { Notify } from "quasar";
           }
         }
         let {data, status} = await vm.$store.dispatch("s1/getS1Applications", payload);
+          console.log(data);
         if([200, 201].includes(status)){
           vm.table_data = data.data.map((item) => {
             return {...item, 
